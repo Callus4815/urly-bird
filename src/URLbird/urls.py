@@ -22,7 +22,9 @@ from .settings import *
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', account_views.homepage, name='homepage')
+    url(r'^$', account_views.homepage, name='homepage'),
+    url(r'^login$', account_views.login, name='login'),
+
 
 ]
 if DEBUG:

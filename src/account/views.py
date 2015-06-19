@@ -1,14 +1,17 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from .forms1 import LoginForm
+
 # Create your views here.
 def homepage(request):
-
-    context = {}
-    return render(request, 'homepage.html', context)
-
+    return render(request, 'homepage.html')
 
 def login(request):
-    pass
+    form = LoginForm()
+    return render(request, 'login.html', {'form': form})
+
+
 
 
 
