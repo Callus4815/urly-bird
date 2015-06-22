@@ -1,12 +1,35 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% block content %}
 
-<br></br>
-<form method="GET" action='homepage'>
-    {{ form.as_p }}
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
 
-<input type="submit" value="Sign UP">
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+{#    <p>Please login to see this page.</p>#}
+    {% endif %}
+{% endif %}
 
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}" align="center">
+{% csrf_token %}
+    <table align="center">
+    <tr>
+        <td>{{ form.username.label_tag }}</td>
+        <td>{{ form.username }}</td>
+    </tr>
+    <tr>
+        <td>{{ form.password.label_tag }}</td>
+        <td>{{ form.password }}</td>
+    </tr>
+    </table>
+    <br />
+    <input type="submit" value="login"/>
+    <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
-{% endblock %}
+
