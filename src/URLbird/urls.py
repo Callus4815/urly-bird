@@ -17,13 +17,26 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import include, url
 from django.contrib import admin
+from rest_framework import routers
+
 from account import views as account_views
 from .settings import *
+from shorturls.views import LinkCreate, LinkShow, RedirectToLongURL
+from api import views
+
+router = routers.DefaultRouter()
+router.register(r'account', views.BookmarkViewSet)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', account_views.homepage, name='homepage'),
-    url(r'^login$', account_views.login, name='login'),
+    url(r'^register/$', account_views.AddUserView.as_view(), name="register"),
+    # url(r'^$', views.login, {'template_name': 'login.html'}, name="login"),
+    url(r'^create$', LinkCreate.as_view(), name='home'),
+    url(r'^link/(?P<pk>\d+)$', LinkShow.as_view(), name='link_show'),
+    url(r'^r/(?P<short_url>\w+)$', RedirectToLongURL.as_view(), name='redirect_short_url'),
+    url(r'^user/(?P<user_id>\d+)$', account_views.UserDetailView.as_view(), name="user_data"),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^', include(router.urls)),
 
 
 ]
